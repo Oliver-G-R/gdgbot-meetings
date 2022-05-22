@@ -1,7 +1,6 @@
-import discord
 from discord.ext import commands
 from services.firebaseServices import Countries
-
+from utils.Embed import EmbedGenerator
 class CountryManager(Countries, commands.Cog, name="CountryManager"):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
@@ -26,12 +25,7 @@ class CountryManager(Countries, commands.Cog, name="CountryManager"):
     @commands.has_permissions(administrator=True)
     async def getAllCtrys(self, ctx):
         try:
-            
-            embed = discord.Embed(
-                title="Paises",
-                description="Lista de paises",
-                color=0x00ff00
-            )
+            embed = EmbedGenerator("Paises", "Todos los paises guardados", "info").getEmbed
 
             for country in self.getCountries:
                 embed.add_field(name=country.id, value=country.to_dict()['country'])
@@ -41,7 +35,6 @@ class CountryManager(Countries, commands.Cog, name="CountryManager"):
         except Exception as e:
             print(e)
             await ctx.send("Error al obtener")
-
 
 def setup(bot: commands.Bot):
     bot.add_cog(CountryManager(bot))
