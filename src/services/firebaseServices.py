@@ -4,7 +4,6 @@ class Countries:
     def __init__(self):
         pass
 
-    @classmethod
     def saveCountries(self, country):
         db.collection('countries').add({
                 'country': country
