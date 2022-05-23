@@ -1,4 +1,3 @@
-from unicodedata import name
 from discord.ext import commands
 from utils.Embed import EmbedGenerator
 class Generic(commands.Cog, name="Generic"):
@@ -16,7 +15,6 @@ class Generic(commands.Cog, name="Generic"):
     
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
-        print("error")
         if isinstance(error, commands.MissingPermissions):
             embed = EmbedGenerator(
                 "Error",
@@ -32,7 +30,7 @@ class Generic(commands.Cog, name="Generic"):
         elif isinstance(error, commands.CommandNotFound):
             await ctx.send(f"{ctx.author.mention}, comando no encontrado")
         elif isinstance(error, commands.MissingRequiredArgument):
-            await ctx.send(f"{ctx.author.mention}, falta argumento")
+            await ctx.send(f"{ctx.author.mention}, faltan argumentos")
 
 def setup(bot: commands.Bot):
     bot.add_cog(Generic(bot))

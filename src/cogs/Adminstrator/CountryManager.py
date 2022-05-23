@@ -1,10 +1,10 @@
 from discord.ext import commands
-from services.firebaseServices import Countries
+from services.firebase.Countries import Countries
 from utils.Embed import EmbedGenerator
 class CountryManager(Countries, commands.Cog, name="CountryManager"):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-    
+
     @commands.command(
         name="save",
         description="Guarda un pais en la base de datos",
@@ -24,17 +24,36 @@ class CountryManager(Countries, commands.Cog, name="CountryManager"):
     )
     @commands.has_permissions(administrator=True)
     async def getAllCtrys(self, ctx):
-        try:
+        countryList = self.getCountries
+        
+        if type(countryList) is list and len(countryList) > 0:
             embed = EmbedGenerator("Paises", "Todos los paises guardados", "info").getEmbed
 
-            for country in self.getCountries:
+            for country in countryList:
                 embed.add_field(name=country.id, value=country.to_dict()['country'])
-    
+            
             await ctx.send(embed=embed)
-           
-        except Exception as e:
-            print(e)
-            await ctx.send("Error al obtener")
+        else:
+            await ctx.send(countryList)
+    
+    @commands.command(
+        name="delCtry",
+        description="Elimina un pais de la base de datos",
+    )
+    @commands.has_permissions(administrator=True)
+    async def removeCountryByName(self, ctx, name):
+        message = self.removeByName(name)
+        await ctx.send(message)
+    
+    @commands.command(
+        name="delAll",
+        description="Elimina todos los paises de la base de datos",
+    )
+    @commands.has_permissions(administrator=True)
+    async def removeAllCtrys(self, ctx):
+        message = self.removeAll()
+        await ctx.send(message)
+        
 
 def setup(bot: commands.Bot):
     bot.add_cog(CountryManager(bot))
