@@ -1,4 +1,4 @@
-# GDGBOT DC - para reunioes
+# GDGBOT DC - para reuniones
 
 ## Antes de empezar  
 
