@@ -1,15 +1,21 @@
 from discord.ext import commands
 from services.firebase.Countries import Countries
 from utils.Embed import EmbedGenerator
+from discord.utils import get
 class CountryManager(Countries, commands.Cog, name="CountryManager"):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
+    
+    async def cog_check(self, ctx):
+        admin = get(ctx.guild.roles, name="Admin")
+        if not admin:
+            await ctx.send("No se han encontrado permisos de administrador")
 
+        
     @commands.command(
         name="save",
         description="Guarda un pais en la base de datos",
     )
-    @commands.has_permissions(administrator=True)
     async def saveCountry(self, ctx, country):
         try:
             self.saveCountries(country)
@@ -22,7 +28,6 @@ class CountryManager(Countries, commands.Cog, name="CountryManager"):
         name="lc",
         description="Lista los paises guardados",
     )
-    @commands.has_permissions(administrator=True)
     async def getAllCtrys(self, ctx):
         countryList = self.getCountries
         
@@ -40,7 +45,6 @@ class CountryManager(Countries, commands.Cog, name="CountryManager"):
         name="delCtry",
         description="Elimina un pais de la base de datos",
     )
-    @commands.has_permissions(administrator=True)
     async def removeCountryByName(self, ctx, name):
         message = self.removeByName(name)
         await ctx.send(message)

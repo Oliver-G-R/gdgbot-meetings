@@ -13,6 +13,46 @@ class Generic(commands.Cog, name="Generic"):
         await ctx.channel.purge(limit=100)
         await ctx.send("Se han borrado los mensajes")
     
+    @commands.command(
+        name="help",
+        description="Muestra la lista de comandos",
+    )
+    async def help(self, ctx):
+        commands = self.bot.commands
+        embed = EmbedGenerator(
+            "Lista de comandos",
+            "Una lista de todos los comandos disponibles para el bot",
+            "info"
+        ).getEmbed
+
+        for command in commands:
+            embed.add_field(
+                name=command.name,
+                value=command.description,
+                inline=False
+            )
+
+        await ctx.send(embed=embed)
+
+    
+    @commands.command(
+        name="info",
+        description="Muestra informacion sobre un comando",
+    )
+    async def info(self, ctx, command: str):
+        command = self.bot.get_command(command)
+        if(command):
+            embed = EmbedGenerator(
+                command.name,
+                command.description,
+                "info"
+            ).getEmbed
+
+            await ctx.send(embed=embed)
+        else:
+            await ctx.send("No se ha encontrado el comando")
+
+    
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
         if isinstance(error, commands.MissingPermissions):

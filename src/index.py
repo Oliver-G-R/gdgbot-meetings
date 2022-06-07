@@ -13,7 +13,7 @@ if __name__ == "__main__":
     bot.remove_command("help")
 
     try: 
-        print("Loading...")
+        print("Cargando...")
         for folder in os.listdir(pathCogs):
             for cog in os.listdir(f'{pathCogs}/{folder}'):
                 if cog.endswith('.py'):
@@ -21,12 +21,12 @@ if __name__ == "__main__":
                     bot.load_extension(f'cogs.{folder}.{cog[:-3]}')
     except Exception as e:
         print(e)
-        print("Error loading cogs")
+        print("Error al cargar los comandos")
     
     try:
         @bot.event
         async def on_ready():
-            print("Bot is ready!")
+            print("El bot esta listo!")
         
         bot.run(TOKEN_BOT)
     except Exception as e:
